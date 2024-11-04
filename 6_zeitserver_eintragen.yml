@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Zeitzone einstellen.
+      ansible.builtin.command: /usr/bin/timedatectl set-timezone Europe/Berlin
+
+    - name: Stadt Frankfurt Zeitserver in /etc/chrony.conf eintragen
+      ansible.builtin.lineinfile:
+        path: /etc/chrony.conf
+        regexp: '^server'
+        line: server {{ zeit_server }}
+      notify:
+        - Restart chronyd service
+
+  handlers:
+    - name: Restart chronyd service
+      ansible.builtin.systemd_service:
+        state: restarted
+        name: chronyd

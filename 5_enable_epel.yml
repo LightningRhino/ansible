@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    # https://docs.fedoraproject.org/en-US/epel/getting-started/
+    - name: Enable a RHSM repository
+      community.general.rhsm_repository:
+        name: codeready-builder-for-rhel-9-x86_64-rpms
+      when: ansible_distribution == "RedHat"
+
+    - name: Import the epel repo key from a url
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9
+      when: ansible_distribution == "RedHat"
+
+    - name: Install the epel repo
+      ansible.builtin.dnf:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+        state: latest
+      when: ansible_distribution == "RedHat"
+
+    - name: Install the epel repo
+      ansible.builtin.dnf:
+        name: epel-release
+        state: latest
+      when: ansible_distribution == "Rocky"

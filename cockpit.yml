@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: enable cockpit.socket
+      ansible.builtin.systemd_service:
+        name: cockpit.socket
+        enabled: true
+        state: started
+    - name: permit traffic in default zone for cockpit
+      ansible.posix.firewalld:
+        service: cockpit
+        permanent: true
+        immediate: true
+        state: enabled

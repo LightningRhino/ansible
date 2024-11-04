@@ -1,0 +1,19 @@
+---
+- name: Edit files from a list of paths
+  hosts: all
+  become: true
+  vars:
+    file_paths:
+      - /path/to/file1.conf
+      - /path/to/file2.conf
+      - /path/to/file3.conf
+
+  tasks:
+    - name: Comment lines containing 'foo' in all listed files
+      ansible.builtin.lineinfile:
+        path: "{{ item }}"
+        regexp: '^(foo.*)'
+        line: '#\1'
+        backrefs: yes
+        backup: yes
+      loop: "{{ file_paths }}"

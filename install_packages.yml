@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install (a list) of package(s)
+      ansible.builtin.dnf:
+        name:
+          - nano
+          - wget
+          - curl
+          - tmux
+          - git
+          - tree
+          - htop
+        state: present
+        update_cache: true

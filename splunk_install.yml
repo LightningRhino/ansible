@@ -1,0 +1,77 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Splunk rpm auf Server kopieren
+      ansible.builtin.copy:
+        src: splunk-9.3.1.rpm
+        dest: /home/olleg/splunk-9.3.1.rpm
+
+    - name: Installation von Splunk
+      ansible.builtin.dnf:
+        name: /home/olleg/splunk-9.3.1.rpm
+        state: present
+        disable_gpg_check: true
+      notify:
+        - Erstelle Credentials
+        - Initialer Start von Splunk
+        - Stoppe Splunk
+        - Splunk als systemd service einrichten
+        - Rechtestruktur anpassen
+        - Ports in der Firewall öffnen
+        - Splunk starten
+
+    - name: Erweitere den Systempfad um das Splunk Verzeichnis
+      ansible.builtin.lineinfile:
+        path: /etc/profile.d/splunk_path.sh
+        line: PATH=$PATH:/opt/splunk/bin
+        create: yes
+        owner: root
+        group: root
+        mode: "0644"
+
+  handlers:
+    - name: Erstelle Credentials
+      ansible.builtin.blockinfile:
+        path: /opt/splunk/etc/system/local/user-seed.conf
+        block: |
+          [user_info]
+          USERNAME = admin
+          PASSWORD = {{ splunk_password }}
+        create: true
+        owner: splunk
+        group: splunk
+        mode: "0400"
+
+    - name: Initialer Start von Splunk
+      ansible.builtin.command: /opt/splunk/bin/splunk start --accept-license --no-prompt
+
+    - name: Stoppe Splunk
+      ansible.builtin.command: /opt/splunk/bin/splunk stop
+
+    - name: Splunk als systemd service einrichten
+      ansible.builtin.command: /opt/splunk/bin/splunk enable boot-start -systemd-managed 1 -user splunk -group splunk
+
+    - name: Rechtestruktur anpassen
+      ansible.builtin.file:
+        path: /opt/splunk
+        state: directory
+        recurse: yes
+        owner: splunk
+        group: splunk
+
+    - name: Ports in der Firewall öffnen
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - 8000/tcp
+        - 9997/tcp
+
+    - name: Splunk starten
+      service:
+        name: Splunkd
+        state: started
+        enabled: true

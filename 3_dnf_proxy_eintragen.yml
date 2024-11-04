@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Proxy in dnf.conf einfügen
+      ansible.builtin.lineinfile:
+        path: /etc/dnf/dnf.conf
+        line: 'proxy={{ dnf_proxy }}'
+        backup: yes

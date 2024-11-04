@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Update all packages to their latest version
+      ansible.builtin.dnf:
+        name: "*"
+        update_cache: true
+        state: latest

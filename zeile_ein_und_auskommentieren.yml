@@ -1,0 +1,28 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Find all 'repo' files in a directory
+      ansible.builtin.find:
+        paths: /tmp
+        patterns: "*.repo"
+      register: found_files
+
+    - name: Uncomment the 'baseurl' line
+      ansible.builtin.lineinfile:
+        path: "{{ item.path }}"
+        regexp: '^#(.*baseurl=.*)'
+        line: '\1'
+        backrefs: yes
+        backup: yes
+      loop: "{{ found_files.files }}"
+
+    - name: Add a '#' to the line containing 'mirrorlist'
+      ansible.builtin.lineinfile:
+        path: "{{ item.path }}"
+        regexp: '^(mirrorlist=.*)'
+        line: '#\1'
+        backrefs: yes
+        backup: yes
+      loop: "{{ found_files.files }}"

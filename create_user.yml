@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Create a user
+      ansible.builtin.user:
+        name: joe
+        create_home: yes
+        password: "{{ 'changeme' | password_hash('sha512') }}"
+        groups: wheel
+        shell: /bin/bash
+        append: yes

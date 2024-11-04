@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+#    - name: Proxy in rhsm.conf eintragen
+#      ansible.builtin.lineinfile:
+#        path: /etc/rhsm/rhsm.conf
+#        regexp: '^proxy_hostname'
+#        line: proxy_hostname = {{ proxy_hostname }}
+
+#    - name: Proxy Port in rhsm.conf eintragen
+#      ansible.builtin.lineinfile:
+#        path: /etc/rhsm/rhsm.conf
+#        regexp: '^proxy_port'
+#        line: proxy_port = {{ proxy_port }}
+
+    - name: Register to Red Hat and auto-subscribe to available content.
+      community.general.redhat_subscription:
+        state: present
+        username: "{{ rhn_user }}"
+        password: "{{ rhn_pass }}"
+        auto_attach: true

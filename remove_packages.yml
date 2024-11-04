@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Remove (a list) of package(s)
+      ansible.builtin.dnf:
+        name:
+          - dnf-automatic
+        state: absent
+
+#    - name: daemon-reload nach Deinstallation eines Services
+#      ansible.builtin.systemd_service:
+#        daemon_reload: true
