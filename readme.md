@@ -3,7 +3,7 @@ If you want to manage EL8, ansible-core 2.16 is the version you want to use.
 
 
 **1.) Schlüsselpaar erstellen:**  
-$  ssh-keygen -t ed25519 -C ansible
+$ ssh-keygen -t ed25519 -C ansible
 
 **2.) Public key zu Server kopieren:**  
 $ ssh-copy-id -i /Users/joe/.ssh/ansible.pub joe@192.168.xxx.xxx
@@ -36,8 +36,8 @@ hinkopieren
 	$ ansible-playbook enable_passwordless_sudo.yml -K
 
 **5.) "host_key_checking" Eintrag aus ansible.cfg wieder entfernen und**  
-	private_key_file = /Users/Olleg/.ssh/ansible  
-	remote_user = olleg  
+	private_key_file = /Users/joe/.ssh/ansible  
+	remote_user = joe  
 eintragen
 
-**6.) "ansible_ssh_*" vars inventory/hosts entfernen**
+**6.) "ansible_ssh_*" vars aus inventory bzw. hosts entfernen**
