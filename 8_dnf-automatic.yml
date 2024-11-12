@@ -2,7 +2,6 @@
 - hosts: all
   become: yes
   tasks:
-
     - name: Install dnf-automatic.
       ansible.builtin.dnf:
         name: dnf-automatic
@@ -11,20 +10,20 @@
     - name: automatic.conf anpassen (download_updates)
       ansible.builtin.lineinfile:
         path: /etc/dnf/automatic.conf
-        regexp: '^download_updates ='
-        line: 'download_updates = no'
+        regexp: "^download_updates ="
+        line: "download_updates = no"
 
     - name: automatic.conf anpassen (emit_via)
       ansible.builtin.lineinfile:
         path: /etc/dnf/automatic.conf
-        regexp: '^emit_via ='
-        line: 'emit_via = command_email'
+        regexp: "^emit_via ="
+        line: "emit_via = command_email"
 
     - name: automatic.conf anpassen (email_from)
       ansible.builtin.replace:
         path: /etc/dnf/automatic.conf
-        regexp: 'email_from = root@example.com'
-        replace: 'email_from = {{ ansible_hostname }}@stadt-frankfurt.de'
+        regexp: "email_from = root@example.com"
+        replace: "email_from = {{ email_from }}"
 
     - name: Ensure dnf-automatic-notifyonly-timer is started and enabled at boot
       service:

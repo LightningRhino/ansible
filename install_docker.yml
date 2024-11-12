@@ -1,0 +1,10 @@
+where dist is rocky bzw. redhat
+uninstall podman runc (redhat)
+add repo (rocky)
+add repo (redhat)
+add gpg key (rocky)
+add gpg key (redhat) 
+install packages (rocky + redhat)
+docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+add user to docker group (rocky + redhat)
+enable docker service (rocky + redhat)

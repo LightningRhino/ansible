@@ -26,4 +26,4 @@
         state: latest
       when: ansible_distribution == "Rocky"
 
-# muss rocky epel repo angepasst werden (baseurl statt mirrorlist?
+# rocky epel.repo anpassen (baseurl statt mirrorlist)

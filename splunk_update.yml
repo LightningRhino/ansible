@@ -1,4 +1,5 @@
 datei kopieren
 Splunk stoppen - systemctl stop Splunkd.service
 rpm -U (state: latest)
+key akzeptieren
 splunk start --accept-license --answer-yes

@@ -2,23 +2,22 @@
 - hosts: all
   become: yes
   tasks:
-
     - name: Install postfix.
       ansible.builtin.dnf:
         name: postfix
         state: present
 
-    - name: Stadt Frankfurt relayhost eintragen.
+    - name: Standard relayhost eintragen.
       ansible.builtin.lineinfile:
         path: /etc/postfix/main.cf
-        line: 'relayhost = {{ mail_server }}'
+        line: "relayhost = {{ mail_server }}"
         backup: yes
 
     - name: Empfänger für root Mails eintragen.
       ansible.builtin.lineinfile:
         path: /etc/aliases
-        regexp: '^#root:'
-        line: 'root: {{ root_mail }}'
+        regexp: "^#root:"
+        line: "root: {{ root_mail }}"
         backup: yes
 
     - name: newaliases ausführen.
