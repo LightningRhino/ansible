@@ -3,27 +3,33 @@
   become: yes
   tasks:
     # https://docs.fedoraproject.org/en-US/epel/getting-started/
-    - name: Enable a RHSM repository
+    - name: Enable a RHSM repository (redhat)
       community.general.rhsm_repository:
         name: codeready-builder-for-rhel-9-x86_64-rpms
       when: ansible_distribution == "RedHat"
 
-    - name: Import the epel repo key from a url
+    - name: Import the epel repo key from a url (redhat)
       ansible.builtin.rpm_key:
         state: present
         key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9
       when: ansible_distribution == "RedHat"
 
-    - name: Install the epel repo
+    - name: Install the epel repo (redhat)
       ansible.builtin.dnf:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
         state: latest
       when: ansible_distribution == "RedHat"
 
-    - name: Install the epel repo
+    - name: Install the epel repo (rocky)
       ansible.builtin.dnf:
         name: epel-release
         state: latest
+      when: ansible_distribution == "Rocky"
+
+    - name: Import the epel repo key (rocky)
+      ansible.builtin.rpm_key:
+        state: present
+        key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9
       when: ansible_distribution == "Rocky"
 
 # rocky epel.repo anpassen (baseurl statt mirrorlist)

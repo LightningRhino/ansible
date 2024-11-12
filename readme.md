@@ -16,6 +16,7 @@ $ ansible-playbook enable_passwordless_sudo.yml -K
 
 **Wie den Schlüssel initial mit Ansible hinkopieren?**
 
+- ssh Service muss am Ziel aktiviert sein  
 - ein User mit sudo Recht am Ziel muss vorhanden sein
 - sshpass muss am ausführenden PC installiert sein
 
