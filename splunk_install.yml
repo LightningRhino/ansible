@@ -5,11 +5,11 @@
     - name: Splunk rpm auf Server kopieren
       ansible.builtin.copy:
         src: splunk-9.3.1.rpm
-        dest: /home/olleg/splunk-9.3.1.rpm
+        dest: /tmp/splunk-9.3.1.rpm
 
     - name: Installation von Splunk
       ansible.builtin.dnf:
-        name: /home/olleg/splunk-9.3.1.rpm
+        name: /tmp/splunk-9.3.1.rpm
         state: present
         disable_gpg_check: true
       notify:

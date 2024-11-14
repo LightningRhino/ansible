@@ -1,5 +1,27 @@
-datei kopieren
-Splunk stoppen - systemctl stop Splunkd.service
-rpm -U (state: latest)
-key akzeptieren
-splunk start --accept-license --answer-yes
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Splunk rpm auf Server kopieren
+      ansible.builtin.copy:
+        src: "{{ splunk_update_file }}"
+        dest: /tmp/{{ splunk_update_file }}
+
+    - name: Update von Splunk
+      ansible.builtin.dnf:
+        name: /tmp/{{ splunk_update_file }}
+        state: latest
+        disable_gpg_check: true
+      notify:
+        - Update initialisieren
+        - Splunk starten
+
+  handlers:
+    - name: Update initialisieren
+      ansible.builtin.command: /opt/splunk/bin/splunk start --accept-license --answer-yes
+
+    - name: Splunk starten
+      service:
+        name: Splunkd
+        state: started
+        enabled: true
