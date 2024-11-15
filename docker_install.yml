@@ -1,10 +1,64 @@
-where dist is rocky bzw. redhat
-uninstall podman runc (redhat)
-add repo (rocky)
-add repo (redhat)
-add gpg key (rocky)
-add gpg key (redhat) 
-install packages (rocky + redhat)
-docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-add user to docker group (rocky + redhat)
-enable docker service (rocky + redhat)
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Remove podman and runc (redhat)
+      ansible.builtin.dnf:
+        name:
+          - podman
+          - runc
+        state: absent
+      when: ansible_distribution == "RedHat"
+
+    - name: Add docker gpg key (rocky)
+      rpm_key:
+        key: https://download.docker.com/linux/centos/gpg
+        state: present
+      when: ansible_distribution == "Rocky"
+
+    - name: Add docker gpg key (redhat)
+      rpm_key:
+        key: https://download.docker.com/linux/rhel/gpg
+        state: present
+      when: ansible_distribution == "RedHat"
+
+    - name: Add docker repository (rocky)
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+        owner: root
+        group: root
+        mode: 0644
+      when: ansible_distribution == "Rocky"
+
+    - name: Add docker repository (redhat)
+      get_url:
+        url: https://download.docker.com/linux/rhel/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+        owner: root
+        group: root
+        mode: 0644
+      when: ansible_distribution == "RedHat"
+
+    - name: Install docker packages
+      ansible.builtin.dnf:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: true
+
+    - name: Add a user to the docker group
+      ansible.builtin.user:
+        name: joe
+        groups: docker
+        append: yes
+
+    - name: docker Service starten
+      service:
+        name: docker
+        state: started
+        enabled: true
