@@ -62,3 +62,25 @@
         name: docker
         state: started
         enabled: true
+
+    - name: Erstelle Verzeichis für Docker Grundgerüst
+      ansible.builtin.file:
+        path: /home/joe/docker/base
+        state: directory
+      become: yes 
+      become_user: joe
+
+    - name: Kopiere Compose Datei
+      ansible.builtin.copy:
+        src: compose-base.yml
+        dest: /home/joe/docker/base/docker-compose.yml
+        owner: joe
+        group: joe
+        mode: '0644'
+      become: yes 
+      become_user: joe 
+
+    - name: Erstelle Basiscontainer
+      ansible.builtin.shell: cd /home/joe/docker/base && docker compose up -d
+      become: yes 
+      become_user: joe 
