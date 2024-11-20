@@ -51,9 +51,9 @@
         state: present
         update_cache: true
 
-    - name: Add a user to the docker group
+    - name: Benutzer der Docker Gruppe hinzufügen
       ansible.builtin.user:
-        name: joe
+        name: "{{ docker_user }}"
         groups: docker
         append: yes
 
@@ -65,22 +65,28 @@
 
     - name: Erstelle Verzeichis für Docker Grundgerüst
       ansible.builtin.file:
-        path: /home/joe/docker/base
+        path: /home/{{ docker_user }}/docker/base
         state: directory
-      become: yes 
-      become_user: joe
+      become: yes
+      become_user: "{{ docker_user }}"
 
     - name: Kopiere Compose Datei
       ansible.builtin.copy:
         src: compose-base.yml
-        dest: /home/joe/docker/base/docker-compose.yml
-        owner: joe
-        group: joe
-        mode: '0644'
-      become: yes 
-      become_user: joe 
+        dest: /home/{{ docker_user }}/docker/base/docker-compose.yml
+        owner: "{{ docker_user }}"
+        group: "{{ docker_user }}"
+        mode: "0644"
+      become: yes
+      become_user: "{{ docker_user }}"
 
-    - name: Erstelle Basiscontainer
-      ansible.builtin.shell: cd /home/joe/docker/base && docker compose up -d
-      become: yes 
-      become_user: joe 
+    # reset_connection doesn't support conditionals.
+    - name: Reset connection so docker group is picked up
+      meta: reset_connection
+
+    - name: Erstelle die Basiscontainer
+      ansible.builtin.shell: 
+        cmd: docker compose up -d
+        chdir: /home/{{ docker_user }}/docker/base 
+      become: yes
+      become_user: "{{ docker_user }}"
