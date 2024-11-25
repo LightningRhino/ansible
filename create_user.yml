@@ -9,9 +9,9 @@
         groups: wheel
         shell: /bin/bash
         append: yes
-      #        password_expire_min: 5
-      #        password_expire_max: 10
-      #        password_expire_warn: 30
+#        password_expire_min: 0
+#        password_expire_max: 90
+#        password_expire_warn: 14
       notify:
         - Initialpasswort erstellen
         - Passwortneuvergabe erzwingen
