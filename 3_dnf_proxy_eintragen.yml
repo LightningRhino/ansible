@@ -6,5 +6,5 @@
     - name: Proxy in dnf.conf einfügen
       ansible.builtin.lineinfile:
         path: /etc/dnf/dnf.conf
-        line: 'proxy={{ dnf_proxy }}'
+        line: 'proxy={{ proxy_url }}'
         backup: yes

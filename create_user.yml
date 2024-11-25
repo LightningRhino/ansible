@@ -20,7 +20,7 @@
       ansible.builtin.blockinfile:
         path: /home/{{ create_user}}/.bashrc
         block: |
-          export http_proxy={{ dnf_proxy }}
+          export http_proxy={{ proxy_url }}
           export https_proxy=$http_proxy
           export ftp_proxy=$http_proxy
 

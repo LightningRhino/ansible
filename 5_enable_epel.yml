@@ -20,6 +20,12 @@
         state: latest
       when: ansible_distribution == "RedHat"
 
+    - name: Ensure the crb repository is enabled (rocky)
+      community.general.dnf_config_manager:
+        name: crb
+        state: enabled
+      when: ansible_distribution == "Rocky"
+
     - name: Install the epel repo (rocky)
       ansible.builtin.dnf:
         name: epel-release
