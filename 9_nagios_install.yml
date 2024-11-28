@@ -1,0 +1,45 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Add nagios gpg key V2
+      rpm_key:
+        key: https://repo.nagios.com/GPG-KEY-NAGIOS-V2
+        state: present
+
+    - name: Add nagios gpg key V3
+      rpm_key:
+        key: https://repo.nagios.com/GPG-KEY-NAGIOS-V3
+        state: present
+
+    - name: Add nagios repository
+      ansible.builtin.dnf:
+        name: "https://repo.nagios.com/nagios/9/nagios-repo-9-2.el9.noarch.rpm"
+        state: present
+
+    - name: Install nagios package
+      ansible.builtin.dnf:
+        name:
+          - ncpa
+        state: present
+        update_cache: true
+
+    - name: nagios Konfiguration bearbeiten
+      ansible.builtin.template:
+        src: ncpa.j2
+        dest: /usr/local/ncpa/etc/ncpa.cfg
+        owner: root
+        group: nagios
+        mode: "0640"
+
+    - name: Port 5693 in der Firewall öffnen
+      ansible.posix.firewalld:
+        port: "5693/tcp"
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: Restart nagios Service
+      service:
+        name: ncpa
+        state: restarted
