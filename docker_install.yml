@@ -94,9 +94,15 @@
     - name: Reset connection so docker group is picked up
       meta: reset_connection
 
-    - name: Erstelle die Basiscontainer
-      ansible.builtin.shell: 
-        cmd: docker compose up -d
-        chdir: /home/{{ docker_user }}/docker/base 
+#    - name: Erstelle und starte die Basiscontainer
+#      ansible.builtin.shell: 
+#        cmd: docker compose up -d
+#        chdir: /home/{{ docker_user }}/docker/base 
+#      become: yes
+#      become_user: "{{ docker_user }}"
+
+    - name: Erstelle und starte die Basiscontainer
+      community.docker.docker_compose_v2:
+         project_src: /home/{{ docker_user }}/docker/base
       become: yes
       become_user: "{{ docker_user }}"
