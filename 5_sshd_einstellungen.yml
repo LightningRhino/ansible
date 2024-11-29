@@ -1,0 +1,20 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: sshd Einstellung vornehmen
+      ansible.builtin.copy:
+        src: sshd-settings.conf
+        dest: /etc/ssh/sshd_config.d/settings.conf
+        owner: root
+        group: root
+        mode: "0600"
+        validate: /usr/sbin/sshd -T -f %s
+      notify:
+        - restart sshd
+
+  handlers:
+    - name: restart sshd
+      service:
+        name: sshd
+        state: restarted

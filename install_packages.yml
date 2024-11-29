@@ -11,6 +11,6 @@
           - tmux
           - git
           - tree
-          - htop
+#          - htop
         state: present
         update_cache: true
