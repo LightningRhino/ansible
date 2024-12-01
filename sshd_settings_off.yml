@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: sshd Einstellungen entfernen
+      ansible.builtin.file:
+        path: /etc/ssh/sshd_config.d/settings.conf
+        state: absent
+      notify:
+        - restart sshd
+
+  handlers:
+    - name: restart sshd
+      service:
+        name: sshd
+        state: restarted

@@ -2,7 +2,7 @@
 - hosts: all
   become: yes
   tasks:
-    - name: sshd Einstellung vornehmen
+    - name: sshd Einstellungen vornehmen
       ansible.builtin.copy:
         src: sshd-settings.conf
         dest: /etc/ssh/sshd_config.d/settings.conf

@@ -1,0 +1,32 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Prüfen, ob docker Service läuft
+      service:
+        name: docker
+        state: started
+
+    - name: Erstelle Verzeichis für Uptime Kuma
+      ansible.builtin.file:
+        path: /home/{{ docker_user }}/docker/uptime-kuma
+        state: directory
+      become: yes
+      become_user: "{{ docker_user }}"
+
+    - name: Kopiere Compose Datei
+      ansible.builtin.copy:
+        src: compose-kuma.yml
+        dest: /home/{{ docker_user }}/docker/uptime-kuma/docker-compose.yml
+        owner: "{{ docker_user }}"
+        group: "{{ docker_user }}"
+        mode: "0644"
+      become: yes
+      become_user: "{{ docker_user }}"
+
+    - name: Uptime Kuma Container starten
+      community.docker.docker_compose_v2:
+         project_src: /home/{{ docker_user }}/docker/uptime-kuma
+      become: yes
+      become_user: "{{ docker_user }}"

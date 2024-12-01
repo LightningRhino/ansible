@@ -9,7 +9,7 @@
           - wget
           - curl
           - tmux
-          - git
+#          - git
           - tree
 #          - htop
         state: present
