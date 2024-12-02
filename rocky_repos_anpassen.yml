@@ -1,1 +1,20 @@
-baseurl statt mirrorlist
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Kopiere Script
+      ansible.builtin.copy:
+        src: update_repos.txt
+        dest: /usr/local/bin/update_repos.sh
+        owner: root
+        group: root
+        mode: "0755"
+      when: ansible_distribution == "Rocky"
+
+    - name: repo Verzeichnis nach /root kopieren
+      ansible.builtin.shell: mkdir /root/yum.repos.d-$(date +%Y-%m-%d,%H:%M) && cp -a /etc/yum.repos.d/*.repo /root/yum.repos.d-$(date +%Y-%m-%d,%H:%M)
+      when: ansible_distribution == "Rocky"
+
+    - name: repo Dateien anpassen (baseurl statt mirrorlist)
+      ansible.builtin.shell: /usr/local/bin/update_repos.sh
+      when: ansible_distribution == "Rocky"
