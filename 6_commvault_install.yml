@@ -1,5 +1,7 @@
 install tar nach /tmp extrahieren
+	exclude:
+          - "Unix/linux-x86"
 answer file kopieren
 silent_install ausführen
-Ports freigeben
+Ports 8404/tcp und 10000-10010/tcp freigeben
 Service (re)starten

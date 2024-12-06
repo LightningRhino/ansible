@@ -7,11 +7,15 @@
         src: splunk-9.3.1.rpm
         dest: /tmp/splunk-9.3.1.rpm
 
+    - name: Add splunk pgp key
+      rpm_key:
+        key: https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub
+        state: present
+
     - name: Installation von Splunk
       ansible.builtin.dnf:
         name: /tmp/splunk-9.3.1.rpm
         state: present
-        disable_gpg_check: true
       notify:
         - Erstelle Credentials
         - Initialer Start von Splunk
