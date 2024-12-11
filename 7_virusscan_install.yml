@@ -25,7 +25,9 @@ dienst (re)starten
         mode: '0755'
 
     - name: Installation ausführen
-      ansible.builtin.shell: /tmp/installrpm.sh -i
+      ansible.builtin.shell: ./installrpm.sh -i
+      args:
+        chdir: /tmp
 
 #    - name: Ports in der Firewall öffnen
 #      ansible.posix.firewalld:

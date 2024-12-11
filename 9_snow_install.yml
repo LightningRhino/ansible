@@ -14,4 +14,4 @@
         disable_gpg_check: true
         state: present
 
-# snowcron ausführen?
+# snowcron ausführen? /etc/cron.d/ prüfen.
