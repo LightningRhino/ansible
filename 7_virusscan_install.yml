@@ -1,5 +1,39 @@
-benötigte pakete installieren
-install datei kopieren
-installation ausführen
 ports freigeben
 dienst (re)starten
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Benötigte Abhängigkeiten installieren
+      ansible.builtin.dnf:
+        name:
+          - net-tools
+          - bind-utils
+          - ed
+          - unzip
+          - psmisc
+        state: present
+        update_cache: true
+
+    - name: Installationsdatei kopieren
+      ansible.builtin.copy:
+        src: installrpm.sh
+        dest: /tmp/installrpm.sh
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Installation ausführen
+      ansible.builtin.shell: installrpm.sh -i
+      args:
+        chdir: /tmp
+
+#    - name: Ports in der Firewall öffnen
+#      ansible.posix.firewalld:
+#        port: "{{ item }}"
+#        permanent: true
+#        immediate: true
+#        state: enabled
+#      loop:
+#        - 55081/tcp

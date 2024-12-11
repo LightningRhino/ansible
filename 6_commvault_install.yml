@@ -1,7 +1,30 @@
-install tar nach /tmp extrahieren
-	exclude:
-          - "Unix/linux-x86"
-answer file kopieren
-silent_install ausführen
-Ports 8404/tcp und 10000-10010/tcp freigeben
-Service (re)starten
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: commvault_install.tar nach /tmp extrahieren
+      ansible.builtin.unarchive:
+        src: commvault_install.tar
+        dest: /tmp
+
+    - name: Silent Installation ausführen
+      ansible.builtin.shell: silent_install -p default.xml
+      args:
+        chdir: /tmp/pkg
+
+    - name: Ports in der Firewall öffnen
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - 8404/tcp
+        - 10000-10010/tcp
+
+    - name: Commvault Service starten
+      service:
+        name: commvault
+        state: started
+        enabled: true

@@ -1,3 +1,14 @@
-Datei kopieren
-rpm installieren
-Service starten
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Installationsdatei kopieren
+      ansible.builtin.copy:
+        src: snowagent.rpm
+        dest: /tmp/snowagent.rpm
+
+    - name: Snowagent installieren
+      ansible.builtin.dnf:
+        name: /tmp/snowagent.rpm
+        state: present
