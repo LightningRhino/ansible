@@ -11,4 +11,7 @@
     - name: Snowagent installieren
       ansible.builtin.dnf:
         name: /tmp/snowagent.rpm
+        disable_gpg_check: true
         state: present
+
+# snowcron ausführen?
