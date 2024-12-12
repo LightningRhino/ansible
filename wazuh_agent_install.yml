@@ -1,0 +1,41 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Importiere wazuh gpg key
+      rpm_key:
+        key: https://packages.wazuh.com/key/GPG-KEY-WAZUH
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Erstelle wazuh.repo
+      ansible.builtin.blockinfile:
+        path: /etc/yum.repos.d/wazuh.repo
+        block: |
+          [wazuh]
+          gpgcheck=1
+          gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH
+          enabled=1
+          name=EL-\$releasever - Wazuh
+          baseurl=https://packages.wazuh.com/4.x/yum/
+          protect=1
+        create: true
+        owner: root
+        group: root
+        mode: '0644'
+      when: ansible_os_family == "RedHat"
+
+    - name: Installiere wazuh-agent
+      ansible.builtin.shell: WAZUH_MANAGER="192.168.178.234" dnf install wazuh-agent -y
+      when: ansible_os_family == "RedHat"
+
+    - name: wazuh-agent starten
+      ansible.builtin.systemd_service:
+        name: wazuh-agent
+        enabled: true
+        state: started        
+        daemon_reload: true
+      when: ansible_os_family == "RedHat"
+
+# Firewall
+# evtl. Repo disablen
