@@ -1,0 +1,39 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Benötigte Abhängigkeiten installieren
+      ansible.builtin.dnf:
+        name:
+          - tar
+
+    - name: Linux.tar nach /tmp extrahieren
+      ansible.builtin.unarchive:
+        src: Linux.tar
+        dest: /tmp
+        exclude: Unix/linux-x86
+
+    # - name: Silent Installation ausführen
+    #   ansible.builtin.shell: ./silent_install -p default.xml
+    #   args:
+    #     chdir: /tmp/pkg
+
+    - name: Benötigte Ports in der Firewall öffnen
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - 8404/tcp
+        - 10000-10010/tcp
+
+    - name: Info anzeigen
+      debug:
+        msg: "Bitte nun auf dem Server 'sudo /tmp/Unix/cvpkgadd' ausführen und nach Anleitung installieren!"
+
+    # - name: Commvault Service starten
+    #   service:
+    #     name: commvault
+    #     state: started
+    #     enabled: true
