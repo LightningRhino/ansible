@@ -9,7 +9,7 @@
         dest: /tmp
 
     - name: Silent Installation ausführen
-      ansible.builtin.shell: silent_install -p default.xml
+      ansible.builtin.shell: ./silent_install -p default.xml
       args:
         chdir: /tmp/pkg
 
