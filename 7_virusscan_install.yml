@@ -1,6 +1,3 @@
-ports freigeben
-dienst (re)starten
-
 ---
 - hosts: all
   become: yes
@@ -29,11 +26,11 @@ dienst (re)starten
       args:
         chdir: /tmp
 
-#    - name: Ports in der Firewall öffnen
-#      ansible.posix.firewalld:
-#        port: "{{ item }}"
-#        permanent: true
-#        immediate: true
-#        state: enabled
-#      loop:
-#        - 55081/tcp
+    - name: Ports in der Firewall öffnen
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - 55081-55083/tcp
