@@ -11,7 +11,6 @@
       ansible.builtin.dnf:
         name: /tmp/{{ splunk_update_file }}
         state: latest
-        disable_gpg_check: true
       notify:
         - Update initialisieren
         - Splunk starten
