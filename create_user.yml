@@ -9,9 +9,9 @@
         groups: wheel
         shell: /bin/bash
         append: yes
-#        password_expire_min: 0
-#        password_expire_max: 90
-#        password_expire_warn: 14
+      #        password_expire_min: 0
+      #        password_expire_max: 90
+      #        password_expire_warn: 14
       notify:
         - Initialpasswort erstellen
         - Passwortneuvergabe erzwingen
@@ -23,6 +23,7 @@
           export http_proxy={{ proxy_url }}
           export https_proxy=$http_proxy
           export ftp_proxy=$http_proxy
+          export no_proxy="localhost,127.0.0.1"
 
   handlers:
     - name: Initialpasswort erstellen
