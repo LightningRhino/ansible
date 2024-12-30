@@ -34,7 +34,7 @@
 
     - name: Port 5693 in der Firewall öffnen
       ansible.posix.firewalld:
-        port: "5693/tcp"
+        rich_rule: rule family=ipv4 source address={{ nagios_server }} port port=5693 protocol=tcp accept
         permanent: true
         immediate: true
         state: enabled
