@@ -9,16 +9,16 @@
         groups: wheel
         shell: /bin/bash
         append: yes
-      #        password_expire_min: 0
-      #        password_expire_max: 90
-      #        password_expire_warn: 14
+        password_expire_min: 0
+        password_expire_max: 365
+        password_expire_warn: 14
       notify:
         - Initialpasswort erstellen
         - Passwortneuvergabe erzwingen
 
     - name: Proxy in .bashrc eintragen
       ansible.builtin.blockinfile:
-        path: /home/{{ create_user}}/.bashrc
+        path: /home/{{ create_user }}/.bashrc
         block: |
           export http_proxy={{ proxy_url }}
           export https_proxy=$http_proxy
