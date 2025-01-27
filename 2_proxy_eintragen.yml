@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Proxy in dnf.conf einfügen
+      ansible.builtin.lineinfile:
+        path: /etc/dnf/dnf.conf
+        line: "proxy={{ proxy_url }}"
+        backup: yes
+
+    - name: Proxy in rhsm.conf eintragen
+      ansible.builtin.lineinfile:
+        path: /etc/rhsm/rhsm.conf
+        regexp: "^proxy_hostname"
+        line: proxy_hostname = {{ proxy_hostname }}
+      when: ansible_distribution == "RedHat"
+
+    - name: Proxy Port in rhsm.conf eintragen
+      ansible.builtin.lineinfile:
+        path: /etc/rhsm/rhsm.conf
+        regexp: "^proxy_port"
+        line: proxy_port = {{ proxy_port }}
+      when: ansible_distribution == "RedHat"

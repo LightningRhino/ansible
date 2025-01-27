@@ -9,6 +9,7 @@
           - wget
           - curl
           - tmux
+          - yum-utils
 #          - git
           - tree
 #          - htop
