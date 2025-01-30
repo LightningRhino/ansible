@@ -10,8 +10,9 @@
           - curl
           - tmux
           - yum-utils
-#          - git
+          - tcpdump
           - tree
+#          - git
 #          - htop
         state: present
         update_cache: true

@@ -71,8 +71,14 @@
         immediate: true
         state: enabled
       loop:
+        - 443/tcp
         - 8000/tcp
+        - 8089/tcp
+        - 8191/tcp
+        - 8443/tcp
+        - 9100/tcp
         - 9997/tcp
+        - 9998/tcp
 
     - name: Splunk starten
       service:
