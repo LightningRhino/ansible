@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Ändere Hostname
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+        use: systemd
+
+#    - name: Update /etc/hosts
+#      ansible.builtin.lineinfile:
+#        path: /etc/hosts
+#        regexp: "^{{ ansible_default_ipv4.address }}.*"
+#        line: "{{ ansible_default_ipv4.address }} {{ inventory_hostname }}"
+#        state: present
