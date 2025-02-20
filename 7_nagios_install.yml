@@ -1,6 +1,10 @@
 ---
 - hosts: all
   become: yes
+  environment:
+    http_proxy: "{{ proxy_url }}"
+    https_proxy: "{{ proxy_url }}"
+
   tasks:
     - name: Add nagios gpg key V2
       rpm_key:
