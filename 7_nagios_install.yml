@@ -2,8 +2,6 @@
 - hosts: all
   become: yes
   environment:
-    http_proxy: "{{ proxy_url }}"
-    https_proxy: "{{ proxy_url }}"
 
   tasks:
     # rpm_key funktioniert nicht mit Proxy!

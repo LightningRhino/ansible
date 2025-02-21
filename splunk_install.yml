@@ -14,7 +14,7 @@
     #     state: present
 
     - name: Add splunk pgp key
-      ansible.builtin.command: rpm --import https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub
+      ansible.builtin.command: rpm --import https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub --httpproxy {{ proxy_hostname }} --httpport {{ proxy_port }}
 
     - name: Installation von Splunk
       ansible.builtin.dnf:
