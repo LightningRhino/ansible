@@ -16,14 +16,14 @@
         - Initialpasswort erstellen
         - Passwortneuvergabe erzwingen
 
-    - name: Proxy in .bashrc eintragen
-      ansible.builtin.blockinfile:
-        path: /home/{{ create_user }}/.bashrc
-        block: |
-          export http_proxy={{ proxy_url }}
-          export https_proxy=$http_proxy
-          export ftp_proxy=$http_proxy
-          export no_proxy="localhost,127.0.0.1"
+    # - name: Proxy in .bashrc eintragen
+    #   ansible.builtin.blockinfile:
+    #     path: /home/{{ create_user }}/.bashrc
+    #     block: |
+    #       export http_proxy={{ proxy_url }}
+    #       export https_proxy=$http_proxy
+    #       export ftp_proxy=$http_proxy
+    #       export no_proxy="localhost,127.0.0.1"
 
   handlers:
     - name: Initialpasswort erstellen

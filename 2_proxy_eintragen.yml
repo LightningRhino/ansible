@@ -21,3 +21,16 @@
         regexp: "^proxy_port"
         line: proxy_port = {{ proxy_port }}
       when: ansible_distribution == "RedHat"
+
+    - name: Den Proxy systemweit eintragen
+      ansible.builtin.blockinfile:
+        path: /etc/profile.d/proxy.sh
+        block: |
+          export http_proxy={{ proxy_url }}
+          export https_proxy=$http_proxy
+          export ftp_proxy=$http_proxy
+          export no_proxy="localhost,127.0.0.1"
+        owner: root
+        group: root
+        mode: "0644"
+        create: yes

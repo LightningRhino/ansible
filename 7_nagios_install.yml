@@ -6,15 +6,23 @@
     https_proxy: "{{ proxy_url }}"
 
   tasks:
+    # rpm_key funktioniert nicht mit Proxy!
+    # - name: Add nagios gpg key V2
+    #   rpm_key:
+    #     key: https://repo.nagios.com/GPG-KEY-NAGIOS-V2
+    #     state: present
+
     - name: Add nagios gpg key V2
-      rpm_key:
-        key: https://repo.nagios.com/GPG-KEY-NAGIOS-V2
-        state: present
+      ansible.builtin.command: rpm --import https://repo.nagios.com/GPG-KEY-NAGIOS-V2
+
+    # rpm_key funktioniert nicht mit Proxy!
+    # - name: Add nagios gpg key V3
+    #   rpm_key:
+    #     key: https://repo.nagios.com/GPG-KEY-NAGIOS-V3
+    #     state: present
 
     - name: Add nagios gpg key V3
-      rpm_key:
-        key: https://repo.nagios.com/GPG-KEY-NAGIOS-V3
-        state: present
+      ansible.builtin.command: rpm --import https://repo.nagios.com/GPG-KEY-NAGIOS-V3
 
     - name: Add nagios repository
       ansible.builtin.dnf:

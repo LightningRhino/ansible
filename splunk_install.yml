@@ -7,10 +7,14 @@
         src: splunk-9.3.1.rpm
         dest: /tmp/splunk-9.3.1.rpm
 
+    # rpm_key funktioniert nicht mit Proxy!
+    # - name: Add splunk pgp key
+    #   rpm_key:
+    #     key: https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub
+    #     state: present
+
     - name: Add splunk pgp key
-      rpm_key:
-        key: https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub
-        state: present
+      ansible.builtin.command: rpm --import https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub
 
     - name: Installation von Splunk
       ansible.builtin.dnf:
