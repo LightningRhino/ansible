@@ -19,18 +19,33 @@
         dest: /tmp/installrpm.sh
         owner: root
         group: root
-        mode: '0755'
+        mode: "0755"
 
     - name: Installation ausführen
       ansible.builtin.shell: ./installrpm.sh -i
       args:
         chdir: /tmp
 
-    - name: Ports in der Firewall öffnen
+    # - name: Ports in der Firewall öffnen
+    #   ansible.posix.firewalld:
+    #     port: "{{ item }}"
+    #     permanent: true
+    #     immediate: true
+    #     state: enabled
+    #   loop:
+    #     - 8883/tcp
+    #     - 55081-55083/tcp
+
+    - name: Ports in der Firewall öffnen 1/2
       ansible.posix.firewalld:
-        port: "{{ item }}"
+        rich_rule: rule family=ipv4 source address={{ vs_source }} port port=8883 protocol=tcp accept
         permanent: true
         immediate: true
         state: enabled
-      loop:
-        - 55081-55083/tcp
+
+    - name: Ports in der Firewall öffnen 2/2
+      ansible.posix.firewalld:
+        rich_rule: rule family=ipv4 source address={{ vs_source }} port port=55080-55085 protocol=tcp accept
+        permanent: true
+        immediate: true
+        state: enabled
