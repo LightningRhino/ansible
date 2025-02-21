@@ -13,7 +13,7 @@
     #     state: present
 
     - name: Add nagios gpg key V2
-      ansible.builtin.command: rpm --import https://repo.nagios.com/GPG-KEY-NAGIOS-V2
+      ansible.builtin.command: rpm --import https://repo.nagios.com/GPG-KEY-NAGIOS-V2 --httpproxy {{ proxy_hostname }} --httpport {{ proxy_port }}
 
     # rpm_key funktioniert nicht mit Proxy!
     # - name: Add nagios gpg key V3
@@ -22,7 +22,7 @@
     #     state: present
 
     - name: Add nagios gpg key V3
-      ansible.builtin.command: rpm --import https://repo.nagios.com/GPG-KEY-NAGIOS-V3
+      ansible.builtin.command: rpm --import https://repo.nagios.com/GPG-KEY-NAGIOS-V3 --httpproxy {{ proxy_hostname }} --httpport {{ proxy_port }}
 
     - name: Add nagios repository
       ansible.builtin.dnf:
