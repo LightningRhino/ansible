@@ -11,7 +11,7 @@
         append: yes
         password_expire_min: 0
         password_expire_max: 365
-        password_expire_warn: 14
+        password_expire_warn: 14 # benötigt ansible-core >=2.16
       notify:
         - Initialpasswort erstellen
         - Passwortneuvergabe erzwingen
