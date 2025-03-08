@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Lösche dnf Cache
+      ansible.builtin.file:
+        path: /var/cache/dnf
+        state: absent
+      when: ansible_distribution == "RedHat"
+
+    - name: Set Red Hat release version
+      # To install it, use: ansible-galaxy collection install community.general
+      community.general.rhsm_release:
+        release: "9.4"
+      when: ansible_distribution == "RedHat"
