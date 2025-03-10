@@ -1,0 +1,11 @@
+---
+- hosts: all
+#  become: yes
+  tasks:
+    - name: sshd Einstellungen vornehmen
+      ansible.builtin.copy:
+        src: lvm-script.sh
+        dest: /home/a160sa-l-soc/custom-scripts/lvm-script.sh
+#        owner: root
+#        group: root
+        mode: "0755"
