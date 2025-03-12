@@ -26,6 +26,8 @@
       ansible.builtin.dnf:
         name: "https://repo.nagios.com/nagios/9/nagios-repo-9-2.el9.noarch.rpm"
         state: present
+      environment:
+        https_proxy: "{{ proxy_url }}"
 
     - name: Install nagios package
       ansible.builtin.dnf:

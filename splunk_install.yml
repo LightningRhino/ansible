@@ -44,7 +44,7 @@
         path: /opt/splunk/etc/system/local/user-seed.conf
         block: |
           [user_info]
-          USERNAME = admin
+          USERNAME = {{ splunk_user }}
           PASSWORD = {{ splunk_password }}
         create: true
         owner: splunk

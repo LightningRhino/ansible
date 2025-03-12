@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+    - name: Ping 1 in crontab eintragen
+      ansible.builtin.cron:
+        name: "ping 1"
+        special_time: reboot
+        job: "ping -c 10 192.168.1.1"
+
+    - name: Ping 2 in crontab eintragen
+      ansible.builtin.cron:
+        name: "ping 2"    
+        special_time: reboot
+        job: "ping -c 10 192.168.1.2"

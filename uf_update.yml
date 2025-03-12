@@ -1,0 +1,26 @@
+---
+- hosts: dmz
+  become: yes
+  tasks:
+    - name: Splunk Forwarder rpm auf Server kopieren
+      ansible.builtin.copy:
+        src: "{{ uf_update_file }}"
+        dest: /tmp/{{ uf_update_file }}
+
+    - name: Update von Splunk Forwarder
+      ansible.builtin.dnf:
+        name: /tmp/{{ uf_update_file }}
+        state: latest
+      notify:
+        - Update initialisieren
+        - Splunk Forwarder starten
+
+  handlers:
+    - name: Update initialisieren
+      ansible.builtin.command: /opt/splunkforwarder/bin/splunk start --accept-license --answer-yes
+
+    - name: Splunk Forwarder starten
+      service:
+        name: SplunkForwarder
+        state: started
+        enabled: true
