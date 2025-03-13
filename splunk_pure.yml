@@ -1,0 +1,48 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Splunk rpm auf Server kopieren
+      ansible.builtin.copy:
+        src: splunk-9.4.1.rpm
+        dest: /tmp/splunk-9.4.1.rpm
+
+    # rpm_key funktioniert nicht mit Proxy!
+    # - name: Add splunk pgp key
+    #   rpm_key:
+    #     key: https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub
+    #     state: present
+
+    - name: Add splunk pgp key
+      ansible.builtin.command: rpm --import https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub --httpproxy {{ proxy_hostname }} --httpport {{ proxy_port }}
+
+    - name: Installation von Splunk
+      ansible.builtin.dnf:
+        name: /tmp/splunk-9.4.1.rpm
+        state: present
+
+    - name: Erweitere den Systempfad um das Splunk Verzeichnis
+      ansible.builtin.lineinfile:
+        path: /etc/profile.d/splunk_path.sh
+        line: PATH=$PATH:/opt/splunk/bin
+        create: yes
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Ports in der Firewall öffnen
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - 443/tcp
+        - 8000/tcp
+        - 8088/tcp
+        - 8089/tcp
+        - 8191/tcp
+        - 8443/tcp
+        - 9100/tcp
+        - 9997/tcp
+        - 9998/tcp
