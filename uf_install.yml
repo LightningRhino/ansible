@@ -4,21 +4,20 @@
   tasks:
     - name: UF rpm auf Server kopieren
       ansible.builtin.copy:
-        src: uf-9.4.0.rpm
-        dest: /tmp/uf-9.4.0.rpm
+        src: uf-9.4.1.rpm
+        dest: /tmp/uf-9.4.1.rpm
 
-#     rpm_key funktioniert nicht mit Proxy!
+    - name: Splunk pgp Key auf Server kopieren
+      ansible.builtin.copy:
+        src: SplunkPGPKey.pub
+        dest: /tmp/SplunkPGPKey.pub
+
     - name: Add splunk pgp key
-      rpm_key:
-        key: https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub
-        state: present
-
-#    - name: Add splunk pgp key
-#      ansible.builtin.command: rpm --import https://docs.splunk.com/images/6/6b/SplunkPGPKey.pub --httpproxy {{ proxy_hostname }} --httpport {{ proxy_port }}
+      ansible.builtin.command: rpm --import /tmp/SplunkPGPKey.pub
 
     - name: Installation von Splunk Forwarder
       ansible.builtin.dnf:
-        name: /tmp/uf-9.4.0.rpm
+        name: /tmp/uf-9.4.1.rpm
         state: present
       notify:
         - Erstelle Credentials
@@ -41,15 +40,6 @@
 
     - name: Initialer Start von SplunkForwarder
       ansible.builtin.command: /opt/splunkforwarder/bin/splunk start --accept-license --no-prompt
-
-    - name: Ports in der Firewall öffnen
-      ansible.posix.firewalld:
-        port: "{{ item }}"
-        permanent: true
-        immediate: true
-        state: enabled
-      loop:
-        - 9997/tcp
 
     - name: SplunkForwarder starten
       service:
