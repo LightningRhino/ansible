@@ -15,14 +15,22 @@
     - name: Add splunk pgp key
       ansible.builtin.command: rpm --import /tmp/SplunkPGPKey.pub
 
-    - name: Installation von Splunk Forwarder
+    - name: Erweitere den Systempfad um das SplunkForwarder Verzeichnis
+      ansible.builtin.lineinfile:
+        path: /etc/profile.d/splunk_path.sh
+        line: PATH=$PATH:/opt/splunkforwarder/bin
+        create: yes
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Installation von SplunkForwarder
       ansible.builtin.dnf:
         name: /tmp/uf-9.4.1.rpm
         state: present
       notify:
         - Erstelle Credentials
         - Initialer Start von SplunkForwarder
-        - Ports in der Firewall öffnen
         - SplunkForwarder starten
 
   handlers:
