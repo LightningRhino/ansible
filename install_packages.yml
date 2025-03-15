@@ -12,6 +12,7 @@
           - yum-utils
           - tcpdump
           - tree
+          - cifs-utils
 #          - git
 #          - htop
         state: present

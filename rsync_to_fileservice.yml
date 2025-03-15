@@ -1,0 +1,44 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install cifs-utils package
+      ansible.builtin.dnf:
+        name:
+          - cifs-utils
+  
+    - name: Erstelle Backupskript in /root
+      ansible.builtin.blockinfile:
+        path: /root/splunk_etc_backup.sh
+        block: |
+          #!/bin/bash
+          mkdir /mnt/fileservice
+          mount -t cifs {{ cifs_share }} /mnt/fileservice -o credentials=/root/.smbcredentials
+          sleep 10
+          mkdir -p /mnt/fileservice/$(hostname)/splunk_etc
+          rysnc -av --delete /opt/splunk/etc/ /mnt/fileservice/$(hostname)/splunk_etc/
+          umount /mnt/fileservice
+        owner: root
+        group: root
+        mode: "0750"
+        create: yes
+ 
+    - name: Erstelle smbcredentials in /root
+      ansible.builtin.blockinfile:
+        path: /root/.smbcredentials
+        block: |
+          username={{ cifs_user }}
+          password={{ cifs_pass }}
+          domain={{ cifs_domain }}
+        owner: root
+        group: root
+        mode: "0600"
+        create: yes 
+
+    - name: Erstelle Cron Eintrag
+      ansible.builtin.cron:
+        name: "rsync_to_fileservice"
+        minute: "0"
+        hour: "21"
+        user: root
+        job: "/root/splunk_etc_backup.sh"
