@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: hardware
   become: yes
   tasks:
     - name: Install cifs-utils package
