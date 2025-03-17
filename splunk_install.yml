@@ -53,20 +53,22 @@
 
     - name: Initialer Start von Splunk
       ansible.builtin.command: /opt/splunk/bin/splunk start --accept-license --no-prompt
-
+      become: yes
+      become_user: splunk
+    
     - name: Stoppe Splunk
       ansible.builtin.command: /opt/splunk/bin/splunk stop
 
     - name: Splunk als systemd service einrichten
-      ansible.builtin.command: /opt/splunk/bin/splunk enable boot-start -systemd-managed 1 -user splunk -group splunk
+      ansible.builtin.command: /opt/splunk/bin/splunk enable boot-start -systemd-managed 1 -user splunk
 
-    - name: Rechtestruktur anpassen
-      ansible.builtin.file:
-        path: /opt/splunk
-        state: directory
-        recurse: yes
-        owner: splunk
-        group: splunk
+    # - name: Rechtestruktur anpassen
+    #   ansible.builtin.file:
+    #     path: /opt/splunk
+    #     state: directory
+    #     recurse: yes
+    #     owner: splunk
+    #     group: splunk
 
     - name: Ports in der Firewall öffnen
       ansible.posix.firewalld:
