@@ -4,8 +4,8 @@
   tasks:
     - name: Splunk rpm auf Server kopieren
       ansible.builtin.copy:
-        src: splunk-9.3.1.rpm
-        dest: /tmp/splunk-9.3.1.rpm
+        src: splunk-9.4.1.rpm
+        dest: /tmp/splunk-9.4.1.rpm
 
     # rpm_key funktioniert nicht mit Proxy!
     # - name: Add splunk pgp key
@@ -18,7 +18,7 @@
 
     - name: Installation von Splunk
       ansible.builtin.dnf:
-        name: /tmp/splunk-9.3.1.rpm
+        name: /tmp/splunk-9.4.1.rpm
         state: present
       notify:
         - Erstelle Credentials
