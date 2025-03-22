@@ -1,8 +1,11 @@
 ---
 - hosts: all
   become: yes
+  vars:
+    createpassword: 'changeme'
+
   tasks:
-    - name: Erstelle Benutzer {{ create_user }}
+    - name: Erstelle Benutzer '{{ create_user }}'
       ansible.builtin.user:
         name: "{{ create_user }}"
         create_home: yes
@@ -16,20 +19,9 @@
         - Initialpasswort erstellen
         - Passwortneuvergabe erzwingen
 
-    # - name: Proxy in .bashrc eintragen
-    #   ansible.builtin.blockinfile:
-    #     path: /home/{{ create_user }}/.bashrc
-    #     block: |
-    #       export http_proxy={{ proxy_url }}
-    #       export https_proxy=$http_proxy
-    #       export ftp_proxy=$http_proxy
-    #       export no_proxy="localhost,127.0.0.1"
-
   handlers:
     - name: Initialpasswort erstellen
-      ansible.builtin.user:
-        name: "{{ create_user }}"
-        password: "{{ 'changeme' | password_hash('sha512') }}"
+      shell: usermod -p $(echo '{{ createpassword }}' | openssl passwd -1 -stdin) {{ create_user }}
 
     - name: Passwortneuvergabe erzwingen
       ansible.builtin.command: passwd -e {{ create_user }}

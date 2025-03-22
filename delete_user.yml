@@ -4,6 +4,6 @@
   tasks:
     - name: Remove user
       ansible.builtin.user:
-        name: joe
+        name: jdoe
         state: absent
         remove: yes
