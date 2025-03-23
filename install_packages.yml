@@ -13,6 +13,7 @@
           - tcpdump
           - tree
           - cifs-utils
+          - rsync
 #          - git
 #          - htop
         state: present
