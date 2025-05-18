@@ -14,6 +14,7 @@
           - tree
           - cifs-utils
           - rsync
+          - bash-completion
 #          - git
 #          - htop
         state: present
